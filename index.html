@@ -1,0 +1,1791 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Temu Typis - Bargain Listing Tycoon</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=JetBrains+Mono:wght@500;700;800&family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        :root {
+            --temu-orange: #ff5500;
+            --temu-yellow: #ffcc00;
+            --temu-red: #ff1e42;
+            --neon-cyan: #00f5d4;
+            --neon-purple: #9b5de5;
+        }
+
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: #0b0d17;
+            color: #f8fafc;
+            overflow-x: hidden;
+            user-select: none;
+        }
+
+        .font-display {
+            font-family: 'Fredoka', sans-serif;
+        }
+
+        .font-mono-code {
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        /* Bargain Marquee Animation */
+        @keyframes marquee {
+            0% { transform: translateX(0%); }
+            100% { transform: translateX(-50%); }
+        }
+        .animate-marquee {
+            display: flex;
+            width: 200%;
+            animation: marquee 24s linear infinite;
+        }
+
+        /* Floating Text Particles */
+        @keyframes floatUp {
+            0% { opacity: 1; transform: translateY(0) scale(0.9); }
+            50% { opacity: 1; transform: translateY(-28px) scale(1.1); }
+            100% { opacity: 0; transform: translateY(-55px) scale(0.95); }
+        }
+        .floating-particle {
+            position: fixed;
+            pointer-events: none;
+            z-index: 9999;
+            font-family: 'Fredoka', sans-serif;
+            font-weight: 700;
+            animation: floatUp 0.9s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.7);
+        }
+
+        /* Typist Desk Bobbing & Typing */
+        @keyframes typeHammer {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            25% { transform: translateY(-4px) rotate(-4deg); }
+            75% { transform: translateY(-2px) rotate(4deg); }
+        }
+        .typist-active {
+            animation: typeHammer 0.28s infinite ease-in-out;
+        }
+
+        @keyframes keyGlow {
+            0%, 100% { box-shadow: 0 0 15px rgba(255, 85, 0, 0.3); }
+            50% { box-shadow: 0 0 28px rgba(255, 204, 0, 0.65); }
+        }
+        .terminal-glow {
+            animation: keyGlow 3s infinite ease-in-out;
+        }
+
+        @keyframes pulseDeal {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.04); }
+        }
+        .deal-pulse {
+            animation: pulseDeal 1.4s infinite ease-in-out;
+        }
+
+        /* Custom Scrollbars */
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #131726;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #334155;
+            border-radius: 9999px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #ff5500;
+        }
+
+        /* Character states in typing box */
+        .char-done {
+            color: #10b981;
+            text-shadow: 0 0 8px rgba(16, 185, 129, 0.4);
+        }
+        .char-current {
+            background: linear-gradient(135deg, #ff5500, #ff9900);
+            color: #ffffff;
+            border-radius: 4px;
+            padding: 0 2px;
+            box-shadow: 0 0 12px rgba(255, 85, 0, 0.9);
+        }
+        .char-error {
+            background: #ef4444;
+            color: #ffffff;
+            border-radius: 4px;
+        }
+        .char-pending {
+            color: #64748b;
+        }
+
+        /* Screen Shake Effect */
+        @keyframes shakeTiny {
+            0%, 100% { transform: translate(0, 0); }
+            25% { transform: translate(-2px, 1px); }
+            75% { transform: translate(2px, -1px); }
+        }
+        .shake-hit {
+            animation: shakeTiny 0.08s ease-in-out;
+        }
+
+        /* Rainbow RGB Border Option */
+        @keyframes rgbBorder {
+            0% { border-color: #ff0055; }
+            25% { border-color: #ffbe0b; }
+            50% { border-color: #00f5d4; }
+            75% { border-color: #8338ec; }
+            100% { border-color: #ff0055; }
+        }
+        .rgb-unlocked {
+            animation: rgbBorder 3s linear infinite !important;
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col bg-[#0b0d17] text-slate-100 selection:bg-orange-500 selection:text-white">
+
+    <!-- TOP FLASH DEAL MARQUEE -->
+    <div class="bg-gradient-to-r from-orange-600 via-red-600 to-amber-500 text-white text-xs font-extrabold py-1.5 overflow-hidden border-b border-yellow-300/30 shadow-md">
+        <div class="animate-marquee whitespace-nowrap flex items-center gap-10">
+            <span>⚡ FLASH LIGHTNING DEAL: 99.9% OFF RGB MECHANICAL SWITCHES!</span>
+            <span>🔥 SHOP LIKE A BILLIONAIRE, TYPE LIKE A TRILLIONAIRE!</span>
+            <span>🎁 FREE SHIPPING ON ALL CLICKY KEYCAPS OVER $0.01!</span>
+            <span>🎉 SPIN THE COUPON WHEEL EVERY 60 SECONDS FOR INSANE MULTIPLIERS!</span>
+            <span>🚀 HIRE QUANTUM AI COPYWRITERS TO FLOOD THE MARKETPLACE!</span>
+            <!-- Duplicate for seamless loop -->
+            <span>⚡ FLASH LIGHTNING DEAL: 99.9% OFF RGB MECHANICAL SWITCHES!</span>
+            <span>🔥 SHOP LIKE A BILLIONAIRE, TYPE LIKE A TRILLIONAIRE!</span>
+            <span>🎁 FREE SHIPPING ON ALL CLICKY KEYCAPS OVER $0.01!</span>
+            <span>🎉 SPIN THE COUPON WHEEL EVERY 60 SECONDS FOR INSANE MULTIPLIERS!</span>
+            <span>🚀 HIRE QUANTUM AI COPYWRITERS TO FLOOD THE MARKETPLACE!</span>
+        </div>
+    </div>
+
+    <!-- MAIN HEADER / STATS DASHBOARD -->
+    <header class="bg-[#121626]/95 backdrop-blur-md border-b border-slate-800 sticky top-0 z-40 px-3 sm:px-6 py-3">
+        <div class="max-w-[1600px] mx-auto flex flex-wrap items-center justify-between gap-3">
+            <!-- Brand Title -->
+            <div class="flex items-center gap-3">
+                <div class="w-11 h-11 rounded-2xl bg-gradient-to-br from-orange-500 via-red-500 to-yellow-400 flex items-center justify-center shadow-lg shadow-orange-500/30 border border-white/20">
+                    <i class="fa-solid fa-keyboard text-white text-xl"></i>
+                </div>
+                <div>
+                    <div class="flex items-center gap-2">
+                        <h1 class="font-display text-2xl sm:text-3xl font-bold tracking-tight bg-gradient-to-r from-orange-400 via-yellow-300 to-orange-500 bg-clip-text text-transparent">
+                            TEMU TYPIS
+                        </h1>
+                        <span class="bg-red-500/20 border border-red-500/50 text-red-300 text-[10px] font-extrabold px-2 py-0.5 rounded-full uppercase tracking-wider">
+                            Tycoon v2.5
+                        </span>
+                    </div>
+                    <p class="text-xs text-slate-400 hidden sm:block">Wholesale E-Commerce Listing & Keyboard Empire</p>
+                </div>
+            </div>
+
+            <!-- Central Live Metrics -->
+            <div class="flex flex-wrap items-center gap-2 sm:gap-4 bg-[#0b0e1a] px-4 py-2 rounded-2xl border border-slate-800/90 shadow-inner">
+                <!-- Cash Balance -->
+                <div class="flex items-center gap-2.5 pr-3 border-r border-slate-800">
+                    <div class="w-9 h-9 rounded-xl bg-emerald-500/15 border border-emerald-500/40 flex items-center justify-center text-emerald-400">
+                        <i class="fa-solid fa-sack-dollar text-lg"></i>
+                    </div>
+                    <div>
+                        <div class="text-[10px] font-bold uppercase tracking-wider text-slate-400">Revenue Balance</div>
+                        <div id="stat-money" class="font-display text-xl sm:text-2xl font-bold text-emerald-400 leading-none">$0</div>
+                    </div>
+                </div>
+
+                <!-- Passive $/sec -->
+                <div class="flex items-center gap-2.5 pr-3 border-r border-slate-800">
+                    <div class="w-9 h-9 rounded-xl bg-orange-500/15 border border-orange-500/40 flex items-center justify-center text-orange-400">
+                        <i class="fa-solid fa-bolt text-lg"></i>
+                    </div>
+                    <div>
+                        <div class="text-[10px] font-bold uppercase tracking-wider text-slate-400">Auto-Typist Rate</div>
+                        <div id="stat-pps" class="font-mono-code text-sm sm:text-base font-bold text-orange-300 leading-none">$0.0/s</div>
+                    </div>
+                </div>
+
+                <!-- Keystroke Power -->
+                <div class="flex items-center gap-2.5 pr-3 border-r border-slate-800">
+                    <div class="w-9 h-9 rounded-xl bg-cyan-500/15 border border-cyan-500/40 flex items-center justify-center text-cyan-400">
+                        <i class="fa-solid fa-hand-pointer text-lg"></i>
+                    </div>
+                    <div>
+                        <div class="text-[10px] font-bold uppercase tracking-wider text-slate-400">Per Keystroke</div>
+                        <div id="stat-kpc" class="font-mono-code text-sm sm:text-base font-bold text-cyan-300 leading-none">$1</div>
+                    </div>
+                </div>
+
+                <!-- Golden Coupons (Prestige) -->
+                <div class="flex items-center gap-2">
+                    <div class="w-9 h-9 rounded-xl bg-amber-500/15 border border-amber-500/40 flex items-center justify-center text-amber-400">
+                        <i class="fa-solid fa-ticket text-lg"></i>
+                    </div>
+                    <div>
+                        <div class="text-[10px] font-bold uppercase tracking-wider text-slate-400">Golden Coupons</div>
+                        <div id="stat-coupons" class="font-mono-code text-sm sm:text-base font-bold text-amber-300 leading-none">0 (+0%)</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right Controls: Sound, Wheel, Prestige, Save -->
+            <div class="flex items-center gap-2">
+                <!-- Spin Coupon Wheel Button -->
+                <button id="btn-wheel" onclick="openWheelModal()" class="relative px-3 py-2 rounded-xl bg-gradient-to-r from-amber-500 to-orange-600 hover:from-amber-400 hover:to-orange-500 text-slate-950 font-extrabold text-xs flex items-center gap-1.5 shadow-lg shadow-orange-500/20 transition transform active:scale-95">
+                    <i class="fa-solid fa-dharmachakra animate-spin"></i>
+                    <span>SPIN WHEEL</span>
+                    <span id="wheel-badge" class="ml-1 px-1.5 py-0.2 bg-red-600 text-white rounded-full text-[10px]">READY</span>
+                </button>
+
+                <!-- Switch Sound Selector -->
+                <div class="relative flex items-center bg-slate-800/90 rounded-xl p-1 border border-slate-700">
+                    <button id="btn-audio-toggle" onclick="toggleAudio()" class="px-2.5 py-1 rounded-lg text-xs font-bold text-emerald-400 hover:bg-slate-700 transition" title="Toggle Keyboard Synth">
+                        <i id="icon-audio" class="fa-solid fa-volume-high"></i>
+                    </button>
+                    <select id="select-switch-sound" onchange="changeSwitchProfile(this.value)" class="bg-transparent text-xs font-bold text-slate-200 pr-2 py-1 focus:outline-none cursor-pointer">
+                        <option value="blue" class="bg-slate-900">Clicky Blue</option>
+                        <option value="brown" class="bg-slate-900">Thocky Panda</option>
+                        <option value="red" class="bg-slate-900">Linear Red</option>
+                        <option value="laser" class="bg-slate-900">Cyber Laser</option>
+                    </select>
+                </div>
+
+                <!-- Prestige / Warehouse Expansion -->
+                <button onclick="openPrestigeModal()" class="px-3 py-2 rounded-xl bg-purple-600/20 hover:bg-purple-600/40 border border-purple-500/50 text-purple-300 font-bold text-xs flex items-center gap-1.5 transition" title="Open New Warehouse (Prestige)">
+                    <i class="fa-solid fa-warehouse"></i>
+                    <span class="hidden md:inline">Rebirth</span>
+                </button>
+
+                <!-- Settings / Save -->
+                <button onclick="manualSave()" class="p-2 rounded-xl bg-slate-800 hover:bg-slate-700 border border-slate-700 text-slate-300 text-xs transition" title="Save Game">
+                    <i class="fa-solid fa-floppy-disk"></i>
+                </button>
+                <button onclick="openResetModal()" class="p-2 rounded-xl bg-slate-800 hover:bg-red-950/60 border border-slate-700 hover:border-red-500/40 text-slate-400 hover:text-red-400 text-xs transition" title="Wipe Save">
+                    <i class="fa-solid fa-trash-can"></i>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- ACTIVE BUFF TIMERS BAR -->
+    <div id="active-buffs-bar" class="max-w-[1600px] w-full mx-auto px-4 pt-2 flex flex-wrap gap-2 empty:hidden"></div>
+
+    <!-- MAIN 3-COLUMN WORKSPACE -->
+    <main class="max-w-[1600px] w-full mx-auto flex-1 grid grid-cols-1 lg:grid-cols-12 gap-5 p-3 sm:p-5">
+
+        <!-- LEFT COLUMN: ACTIVE TYPING TERMINAL & FLASH ABILITIES (5 COLS) -->
+        <section class="lg:col-span-5 flex flex-col gap-4">
+
+            <!-- LIVE TYPING TERMINAL CARD -->
+            <div id="terminal-card" class="bg-gradient-to-b from-[#161b2e] to-[#101424] rounded-3xl border-2 border-orange-500/60 p-4 sm:p-5 shadow-2xl terminal-glow flex flex-col gap-4 relative overflow-hidden">
+                
+                <!-- Top Terminal Status Row -->
+                <div class="flex flex-wrap items-center justify-between gap-2 border-b border-slate-800 pb-3">
+                    <div class="flex items-center gap-2">
+                        <span class="inline-block w-3 h-3 rounded-full bg-emerald-400 animate-ping"></span>
+                        <span class="text-xs font-extrabold uppercase tracking-wider text-orange-400">
+                            LIVE PRODUCT LISTING TERMINAL
+                        </span>
+                    </div>
+
+                    <!-- Mode Switcher: Real Typing vs Mash Any Key -->
+                    <div class="flex items-center gap-2">
+                        <button id="btn-mode-toggle" onclick="toggleMashMode()" class="px-3 py-1 rounded-full text-xs font-extrabold border transition flex items-center gap-1.5 bg-emerald-500/20 border-emerald-400 text-emerald-300">
+                            <i class="fa-solid fa-bolt"></i>
+                            <span id="label-mode">Mode: Smart Type / Mash</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Product Item Preview Header -->
+                <div class="flex items-center justify-between bg-[#0c0f1d] p-3 rounded-2xl border border-slate-800/90">
+                    <div class="flex items-center gap-3">
+                        <div id="product-emoji" class="w-12 h-12 rounded-2xl bg-gradient-to-br from-orange-500/20 to-amber-500/10 border border-orange-500/30 flex items-center justify-center text-3xl shadow-inner">
+                            🎧
+                        </div>
+                        <div>
+                            <div class="flex items-center gap-2">
+                                <span id="product-tag" class="text-[10px] font-extrabold uppercase px-2 py-0.5 rounded bg-red-500/20 text-red-400 border border-red-500/30">
+                                    98% OFF FLASH
+                                </span>
+                                <span id="product-bonus-label" class="text-xs font-bold text-emerald-400">
+                                    Completion Bonus: +$25
+                                </span>
+                            </div>
+                            <h2 id="product-title" class="font-bold text-slate-100 text-sm sm:text-base mt-0.5">
+                                Wireless Bluetooth 99.0 Earbuds Ultra Bass
+                            </h2>
+                        </div>
+                    </div>
+                    <div class="text-right">
+                        <div class="text-[10px] text-slate-400 uppercase font-bold">Listings Shipped</div>
+                        <div id="stat-listings-done" class="font-mono-code text-lg font-extrabold text-amber-400">0</div>
+                    </div>
+                </div>
+
+                <!-- THE INTERACTIVE TYPING BOX -->
+                <div id="typing-arena" tabindex="0" onclick="focusTypingArena()" class="relative bg-[#080a14] border-2 border-slate-700/80 focus:border-orange-500 rounded-2xl p-4 sm:p-5 min-h-[135px] flex flex-col justify-between cursor-text transition outline-none group">
+                    <div class="flex items-center justify-between text-[11px] text-slate-400 mb-2">
+                        <span><i class="fa-solid fa-terminal text-orange-400 mr-1"></i> Type the characters below (or mash any key in Mash Mode!):</span>
+                        <span id="typing-progress-text" class="font-mono-code text-orange-300 font-bold">0 / 45 chars</span>
+                    </div>
+
+                    <!-- Rendered Prompt Characters -->
+                    <div id="prompt-container" class="font-mono-code text-base sm:text-lg leading-relaxed tracking-wide break-words select-none my-1">
+                        <!-- Populated by JS -->
+                    </div>
+
+                    <!-- Progress Bar Inside Terminal -->
+                    <div class="w-full bg-slate-800/80 h-2.5 rounded-full overflow-hidden mt-3 border border-slate-700/50">
+                        <div id="prompt-progress-bar" class="bg-gradient-to-r from-orange-500 via-amber-400 to-emerald-400 h-full w-0 transition-all duration-75"></div>
+                    </div>
+                </div>
+
+                <!-- Combo Streak & WPM Meter + Big Mobile / Mouse Tap Button -->
+                <div class="grid grid-cols-1 sm:grid-cols-12 gap-3 items-center">
+                    <!-- Combo & WPM -->
+                    <div class="sm:col-span-6 flex items-center justify-around bg-[#0c0f1d] py-2.5 px-3 rounded-2xl border border-slate-800">
+                        <div class="text-center">
+                            <div class="text-[10px] font-bold uppercase text-slate-400">Combo Multiplier</div>
+                            <div id="stat-combo" class="font-display text-xl font-bold text-orange-400">1.00x <span class="text-xs text-slate-500">(0)</span></div>
+                        </div>
+                        <div class="h-8 w-[1px] bg-slate-800"></div>
+                        <div class="text-center">
+                            <div class="text-[10px] font-bold uppercase text-slate-400">Speed (WPM)</div>
+                            <div id="stat-wpm" class="font-display text-xl font-bold text-cyan-400">0 WPM</div>
+                        </div>
+                    </div>
+
+                    <!-- Giant Tactile Keycap Button for Mouse / Touch / Rapid Click -->
+                    <button id="btn-manual-type" onmousedown="triggerManualKeystroke(event)" ontouchstart="triggerManualKeystroke(event); event.preventDefault();" class="sm:col-span-6 py-3.5 px-4 rounded-2xl bg-gradient-to-b from-orange-500 to-red-600 hover:from-orange-400 hover:to-red-500 active:translate-y-1 text-white font-display font-bold text-base tracking-wide shadow-[0_5px_0_#9a1b1b,0_10px_20px_rgba(255,85,0,0.4)] active:shadow-[0_1px_0_#9a1b1b] transition flex items-center justify-center gap-2 cursor-pointer select-none">
+                        <i class="fa-solid fa-bolt-lightning text-yellow-300"></i>
+                        <span>TYPE / MASH KEY!</span>
+                    </button>
+                </div>
+
+                <!-- Visual Mini Mechanical Keyboard Visualizer -->
+                <div class="bg-[#090c16] p-2.5 rounded-2xl border border-slate-800/80 hidden sm:flex flex-col gap-1.5 items-center">
+                    <div id="kb-row-1" class="flex gap-1 justify-center w-full"></div>
+                    <div id="kb-row-2" class="flex gap-1 justify-center w-full"></div>
+                    <div id="kb-row-3" class="flex gap-1 justify-center w-full"></div>
+                    <div class="w-3/5 h-6 rounded-lg bg-slate-800 border-b-2 border-slate-950 flex items-center justify-center text-[10px] font-mono-code text-slate-400 transition-transform duration-75" id="kb-space">
+                        TEMU SUPER SPACEBAR
+                    </div>
+                </div>
+            </div>
+
+            <!-- ACTIVE COUPON SKILLS / COOLDOWN BOOSTERS -->
+            <div class="bg-[#121626] rounded-3xl border border-slate-800 p-4 shadow-xl">
+                <div class="flex items-center justify-between mb-3">
+                    <h3 class="font-display text-base font-bold text-amber-400 flex items-center gap-2">
+                        <i class="fa-solid fa-fire-flame-curved text-orange-500"></i>
+                        FLASH MARKETING SKILLS (ACTIVE BUFFS)
+                    </h3>
+                    <span class="text-[11px] text-slate-400">Click to activate instant boosts!</span>
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-2.5">
+                    <!-- Skill 1: Overclock Keyswitches -->
+                    <button id="skill-btn-overclock" onclick="activateSkill('overclock')" class="p-3 rounded-2xl bg-slate-900/90 hover:bg-slate-800 border border-orange-500/40 text-left transition relative overflow-hidden group">
+                        <div class="flex items-center justify-between">
+                            <span class="text-xl">⚡</span>
+                            <span id="skill-status-overclock" class="text-[10px] font-extrabold px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300">READY</span>
+                        </div>
+                        <div class="font-bold text-xs text-slate-100 mt-1.5">3x Keystroke Surge</div>
+                        <div class="text-[10px] text-slate-400">3x typing cash for 20s (60s CD)</div>
+                    </button>
+
+                    <!-- Skill 2: Free Shipping Frenzy -->
+                    <button id="skill-btn-frenzy" onclick="activateSkill('frenzy')" class="p-3 rounded-2xl bg-slate-900/90 hover:bg-slate-800 border border-cyan-500/40 text-left transition relative overflow-hidden group">
+                        <div class="flex items-center justify-between">
+                            <span class="text-xl">🚚</span>
+                            <span id="skill-status-frenzy" class="text-[10px] font-extrabold px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300">READY</span>
+                        </div>
+                        <div class="font-bold text-xs text-slate-100 mt-1.5">2.5x Auto-Factory</div>
+                        <div class="text-[10px] text-slate-400">2.5x passive $/s for 25s (90s CD)</div>
+                    </button>
+
+                    <!-- Skill 3: Auto-Bot Burst -->
+                    <button id="skill-btn-autobot" onclick="activateSkill('autobot')" class="p-3 rounded-2xl bg-slate-900/90 hover:bg-slate-800 border border-purple-500/40 text-left transition relative overflow-hidden group">
+                        <div class="flex items-center justify-between">
+                            <span class="text-xl">🤖</span>
+                            <span id="skill-status-autobot" class="text-[10px] font-extrabold px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300">READY</span>
+                        </div>
+                        <div class="font-bold text-xs text-slate-100 mt-1.5">Turbo Script Bot</div>
+                        <div class="text-[10px] text-slate-400">Auto-types 12 keys/s for 15s (75s CD)</div>
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- CENTER COLUMN: LIVE AGENCY FLOOR & MYSTERY BOXES (4 COLS) -->
+        <section class="lg:col-span-4 flex flex-col gap-4">
+            <div class="bg-[#121626] rounded-3xl border border-slate-800 p-4 sm:p-5 flex-1 flex flex-col shadow-xl relative overflow-hidden">
+                <!-- Floor Header -->
+                <div class="flex items-center justify-between border-b border-slate-800 pb-3 mb-3">
+                    <div>
+                        <h2 class="font-display text-lg font-bold text-white flex items-center gap-2">
+                            <i class="fa-solid fa-building-user text-orange-400"></i>
+                            TYPIST WAREHOUSE FLOOR
+                        </h2>
+                        <p class="text-xs text-slate-400">Watch your hired crew hammer out 5-star bargain listings!</p>
+                    </div>
+                    <div class="text-right">
+                        <span id="stat-total-typists" class="px-2.5 py-1 rounded-xl bg-orange-500/15 border border-orange-500/30 text-orange-300 font-mono-code text-xs font-bold">
+                            0 Staff
+                        </span>
+                    </div>
+                </div>
+
+                <!-- POP-UP FLASH MYSTERY PARCEL BANNER (Spawns periodically) -->
+                <div id="mystery-drone-banner" onclick="claimMysteryParcel(event)" class="hidden mb-3 p-3 rounded-2xl bg-gradient-to-r from-amber-500 via-orange-500 to-red-500 text-slate-950 font-extrabold cursor-pointer shadow-lg shadow-orange-500/30 deal-pulse items-center justify-between">
+                    <div class="flex items-center gap-2.5">
+                        <span class="text-2xl">📦</span>
+                        <div>
+                            <div class="text-xs uppercase tracking-wider font-black text-white drop-shadow">AIRDROP FLASH PARCEL!</div>
+                            <div class="text-xs font-bold text-slate-950">Click before it expires for instant cash + buff!</div>
+                        </div>
+                    </div>
+                    <span class="px-2.5 py-1 rounded-lg bg-slate-950 text-amber-300 text-xs font-mono-code">CLAIM!</span>
+                </div>
+
+                <!-- VISUAL DESK GRID -->
+                <div id="office-floor-grid" class="grid grid-cols-2 sm:grid-cols-3 gap-2.5 flex-1 content-start overflow-y-auto max-h-[520px] pr-1">
+                    <!-- Populated dynamically with hired typist stations -->
+                </div>
+
+                <!-- Warehouse Footer Milestones -->
+                <div class="mt-4 pt-3 border-t border-slate-800 flex items-center justify-between text-xs text-slate-400">
+                    <span><i class="fa-solid fa-trophy text-amber-400 mr-1"></i> Every <strong class="text-slate-200">10 levels</strong> of a typist <strong class="text-emerald-400">DOUBLES (2x)</strong> their output!</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- RIGHT COLUMN: HIRE TYPISTS & GEAR BUFFS SHOP (3 COLS) -->
+        <section class="lg:col-span-3 flex flex-col bg-[#121626] rounded-3xl border border-slate-800 shadow-xl overflow-hidden max-h-[780px]">
+            <!-- Shop Tabs -->
+            <div class="grid grid-cols-2 bg-[#0c0f1d] p-1.5 border-b border-slate-800">
+                <button id="tab-btn-typists" onclick="switchShopTab('typists')" class="py-2.5 rounded-2xl font-display font-bold text-xs sm:text-sm transition flex items-center justify-center gap-1.5 bg-gradient-to-r from-orange-500 to-red-500 text-white shadow">
+                    <i class="fa-solid fa-users-gear"></i>
+                    <span>Typist Roster</span>
+                </button>
+                <button id="tab-btn-upgrades" onclick="switchShopTab('upgrades')" class="py-2.5 rounded-2xl font-display font-bold text-xs sm:text-sm transition flex items-center justify-center gap-1.5 text-slate-400 hover:text-white">
+                    <i class="fa-solid fa-microchip"></i>
+                    <span>Gear & Buffs</span>
+                    <span id="upgrade-count-badge" class="px-1.5 py-0.2 text-[10px] rounded-full bg-amber-500 text-slate-950 font-extrabold">0</span>
+                </button>
+            </div>
+
+            <!-- Buy Multiplier Bar (1x, 10x, MAX) -->
+            <div class="flex items-center justify-between px-4 py-2 bg-[#0f1322] border-b border-slate-800/80 text-xs">
+                <span class="text-slate-400 font-bold uppercase text-[10px]">Bulk Buy Quantity:</span>
+                <div class="flex gap-1">
+                    <button id="buy-mult-1" onclick="setBuyMultiplier(1)" class="px-2.5 py-0.5 rounded-lg font-bold bg-orange-500 text-white">1x</button>
+                    <button id="buy-mult-10" onclick="setBuyMultiplier(10)" class="px-2.5 py-0.5 rounded-lg font-bold bg-slate-800 text-slate-400 hover:text-white">10x</button>
+                    <button id="buy-mult-max" onclick="setBuyMultiplier('max')" class="px-2.5 py-0.5 rounded-lg font-bold bg-slate-800 text-slate-400 hover:text-white">MAX</button>
+                </div>
+            </div>
+
+            <!-- TAB 1: TYPISTS ROSTER LIST -->
+            <div id="shop-panel-typists" class="flex-1 overflow-y-auto p-3 space-y-2.5">
+                <!-- Populated by JS -->
+            </div>
+
+            <!-- TAB 2: GEAR & PERMANENT UPGRADES LIST -->
+            <div id="shop-panel-upgrades" class="hidden flex-1 overflow-y-auto p-3 space-y-2.5">
+                <!-- Populated by JS -->
+            </div>
+        </section>
+
+    </main>
+
+    <!-- MODAL 1: SPIN THE COUPON WHEEL -->
+    <div id="modal-wheel" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 hidden items-center justify-center p-4">
+        <div class="bg-[#141829] border-2 border-amber-400 rounded-3xl max-w-md w-full p-6 text-center shadow-2xl relative">
+            <button onclick="closeWheelModal()" class="absolute top-4 right-4 w-8 h-8 rounded-full bg-slate-800 text-slate-400 hover:text-white">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+            <div class="inline-block px-3 py-1 rounded-full bg-amber-500/20 border border-amber-400/40 text-amber-300 text-xs font-extrabold mb-2">
+                🎉 LUCKY BARGAIN ROULETTE 🎉
+            </div>
+            <h3 class="font-display text-2xl font-bold text-white">Spin the Mega Coupon Wheel!</h3>
+            <p class="text-xs text-slate-400 mt-1">100% Guaranteed Prize! Zero Minimum Spend!</p>
+
+            <!-- CSS Visual Wheel -->
+            <div class="relative w-56 h-56 mx-auto my-6">
+                <!-- Pointer Arrow -->
+                <div class="absolute -top-4 left-1/2 -translate-x-1/2 z-20 text-3xl text-white drop-shadow-[0_2px_6px_rgba(0,0,0,0.9)]">
+                    🔻
+                </div>
+                <div id="wheel-spinner" class="w-full h-full rounded-full border-8 border-amber-400 shadow-[0_0_30px_rgba(255,180,0,0.4)] transition-transform duration-[3200ms] cubic-bezier(0.15, 0.85, 0.25, 1) relative overflow-hidden"
+                     style="background: conic-gradient(#ff5500 0deg 60deg, #8338ec 60deg 120deg, #10b981 120deg 180deg, #f59e0b 180deg 240deg, #3b82f6 240deg 300deg, #ec4899 300deg 360deg);">
+                    <div class="absolute inset-0 flex items-center justify-center">
+                        <div class="w-14 h-14 rounded-full bg-slate-950 border-4 border-amber-300 flex items-center justify-center font-display font-bold text-amber-400 text-xs">
+                            99%
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="wheel-result-box" class="min-h-[44px] flex items-center justify-center text-sm font-bold text-emerald-400 mb-3">
+                Click SPIN below to claim your flash reward!
+            </div>
+
+            <button id="btn-spin-action" onclick="spinCouponWheel()" class="w-full py-3.5 rounded-2xl bg-gradient-to-r from-amber-400 via-orange-500 to-red-500 text-slate-950 font-display font-bold text-lg shadow-lg hover:brightness-110 transition">
+                SPIN FOR FREE NOW!
+            </button>
+        </div>
+    </div>
+
+    <!-- MODAL 2: PRESTIGE / OPEN NEW MEGA WAREHOUSE -->
+    <div id="modal-prestige" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 hidden items-center justify-center p-4">
+        <div class="bg-[#141829] border-2 border-purple-500 rounded-3xl max-w-md w-full p-6 text-center shadow-2xl relative">
+            <button onclick="closePrestigeModal()" class="absolute top-4 right-4 w-8 h-8 rounded-full bg-slate-800 text-slate-400 hover:text-white">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+            <div class="w-14 h-14 rounded-2xl bg-purple-500/20 border border-purple-500/40 flex items-center justify-center text-3xl mx-auto mb-3">
+                🏭
+            </div>
+            <h3 class="font-display text-2xl font-bold text-white">Global Warehouse Expansion</h3>
+            <p class="text-xs text-slate-300 mt-2 leading-relaxed">
+                Sell your current typing operation to open a futuristic automated fulfillment hub! You will reset your cash, typists, and standard gear in exchange for permanent <strong class="text-amber-300">Golden Coupons</strong>.
+            </p>
+
+            <div class="bg-[#0b0e1a] rounded-2xl p-4 my-4 border border-slate-800 space-y-2 text-sm">
+                <div class="flex justify-between">
+                    <span class="text-slate-400">Current Golden Coupons:</span>
+                    <span id="prestige-current-coupons" class="font-mono-code font-bold text-amber-400">0</span>
+                </div>
+                <div class="flex justify-between">
+                    <span class="text-slate-400">Coupons Claimable on Rebirth:</span>
+                    <span id="prestige-claim-coupons" class="font-mono-code font-bold text-emerald-400">+0</span>
+                </div>
+                <div class="flex justify-between border-t border-slate-800 pt-2">
+                    <span class="text-slate-400">Bonus Per Golden Coupon:</span>
+                    <span class="font-bold text-purple-300">+25% All Income Forever</span>
+                </div>
+            </div>
+
+            <p class="text-[11px] text-slate-400 mb-4">
+                (Requires at least $25,000 lifetime earnings to claim your first Golden Coupon)
+            </p>
+
+            <button id="btn-confirm-prestige" onclick="confirmPrestige()" class="w-full py-3 rounded-2xl bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-500 hover:to-pink-500 text-white font-display font-bold text-base shadow-lg transition">
+                REBIRTH & CLAIM COUPONS
+            </button>
+        </div>
+    </div>
+
+    <!-- MODAL 3: RESET CONFIRMATION -->
+    <div id="modal-reset" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 hidden items-center justify-center p-4">
+        <div class="bg-[#141829] border-2 border-red-500 rounded-3xl max-w-sm w-full p-6 text-center shadow-2xl">
+            <div class="text-4xl mb-2">⚠️</div>
+            <h3 class="font-display text-xl font-bold text-white">Factory Reset Save?</h3>
+            <p class="text-xs text-slate-400 mt-2">This will permanently wipe all your money, typists, upgrades, and Golden Coupons.</p>
+            <div class="flex gap-3 mt-5">
+                <button onclick="closeResetModal()" class="flex-1 py-2.5 rounded-xl bg-slate-800 text-slate-300 font-bold text-xs">Cancel</button>
+                <button onclick="confirmHardReset()" class="flex-1 py-2.5 rounded-xl bg-red-600 hover:bg-red-500 text-white font-bold text-xs">Yes, Wipe All</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- TOAST NOTIFICATION CONTAINER -->
+    <div id="toast-container" class="fixed bottom-4 right-4 z-50 flex flex-col gap-2 pointer-events-none"></div>
+
+    <script>
+        /* =========================================================================
+           1. PRODUCT LISTINGS DATABASE (Hilarious Bargain E-Commerce Prompts)
+           ========================================================================= */
+        const PRODUCT_PROMPTS = [
+            { emoji: "🎧", tag: "99% OFF DEAL", title: "TWS Wireless 99.0 Bass Earbuds", text: "ultra bass gaming earbuds waterproof 9000mah battery free shipping now" },
+            { emoji: "🦆", tag: "VIRAL ITEM", title: "Glowing Car Dashboard Duck With Helmet", text: "cute yellow rubber duck with spinning propeller helmet squeaks loud" },
+            { emoji: "⌨️", tag: "BESTSELLER", title: "RGB Tri-Mode Mechanical Keyboard 600%", text: "hot swappable holy panda tactile switches pudding keycaps rainbow glow" },
+            { emoji: "🧦", tag: "FLASH SALE", title: "Magnetic Holding Hands Couple Socks", text: "funny 3d doll eyes cotton socks hold hands when you walk together" },
+            { emoji: "🔦", tag: "LIGHTNING", title: "100,000,000 Lumen Tactical Laser Flashlight", text: "super bright zoomable aluminum led torch lights up entire mountain" },
+            { emoji: "🐱", tag: "HOT PICK", title: "Luxury Shark Mouth Cat Bed Cave", text: "soft plush washable winter warm pet sleeping bag for chonky kittens" },
+            { emoji: "🕹️", tag: "CLEARANCE", title: "Retro 99,999-in-1 Pocket Handheld Console", text: "ips screen classic arcade emulator dual joystick pocket game player" },
+            { emoji: "🥑", tag: "BARGAIN", title: "5-in-1 Stainless Avocado Slicer Pitter", text: "ergonomic kitchen gadget slices pits and scoops fresh avocados fast" },
+            { emoji: "🪑", tag: "LIMITED", title: "Zero Gravity RGB Massage Gaming Throne", text: "reclining faux leather office chair lumbar pillow footrest cupholder" },
+            { emoji: "🛸", tag: "NEW ARRIVAL", title: "Hand Controlled Boomerang Flying Orb Drone", text: "magic cosmic led spinner ball floats in air 360 degree trick toy" },
+            { emoji: "🧄", tag: "UNDER $1", title: "USB Rechargeable Mini Electric Garlic Chopper", text: "one touch waterproof wireless food processor crushes garlic in seconds" },
+            { emoji: "🕶️", tag: "CYBER DEAL", title: "Futuristic Cyberpunk LED Visor Glasses", text: "seven color neon light up party shades for synthwave nightclubs" },
+            { emoji: "🥟", tag: "KITCHEN", title: "Automatic Double Head Dumpling Maker Press", text: "push button lazy dumpling skin wrapper mold makes two pierogis at once" },
+            { emoji: "🧼", tag: "ODDLY GOOD", title: "Cloud Shaped Foaming Soap Dispenser", text: "infrared sensor touchless bathroom pump dispenses cute flower foam" }
+        ];
+
+        /* =========================================================================
+           2. AUTOMATED TYPIST ROSTER DEFINITIONS
+           ========================================================================= */
+        const TYPIST_TYPES = [
+            {
+                id: "uncle",
+                name: "One-Finger Bargain Uncle",
+                avatar: "👴",
+                desc: "Pecks one key per minute while squinting over reading glasses.",
+                baseCost: 15,
+                basePps: 1.2,
+                quotes: ["Where is the any key?", "99% off?!", "Hold on...", "Click!"]
+            },
+            {
+                id: "intern",
+                name: "Red-Bull Intern",
+                avatar: "🧑‍💻",
+                desc: "Fueled by cheap energy drinks and panic. Writes 200 tags/min.",
+                baseCost: 120,
+                basePps: 8,
+                quotes: ["Need more caffeine!", "Five stars!", "Shipping now!", "LGTM!"]
+            },
+            {
+                id: "dropshipper",
+                name: "RGB Dropship Guru",
+                avatar: "😎",
+                desc: "Uses custom Cherry MX Blues loud enough to wake the neighbors.",
+                baseCost: 850,
+                basePps: 45,
+                quotes: ["Buy my course!", "Trending product!", "10x ROI baby!", "Clack clack!"]
+            },
+            {
+                id: "cat",
+                name: "Bongo Keyboard Cat",
+                avatar: "🐱",
+                desc: "Paws at two mechanical boards simultaneously at supersonic speed.",
+                baseCost: 5200,
+                basePps: 240,
+                quotes: ["Meow-rketing!", "Purrfect deal!", "*taptaptap*", "Send treats!"]
+            },
+            {
+                id: "octopus",
+                name: "8-Arm Switch Tester",
+                avatar: "🐙",
+                desc: "Commands 8 split ergonomic ortholinear keyboards at once.",
+                baseCost: 34000,
+                basePps: 1350,
+                quotes: ["8x WPM!", "Lubed switches!", "All tentacles on deck!", "Thocky!"]
+            },
+            {
+                id: "gremlin",
+                name: "Macro Script Gremlin",
+                avatar: "👾",
+                desc: "Binds an entire 500-word SEO product listing to a single scroll wheel.",
+                baseCost: 225000,
+                basePps: 7800,
+                quotes: ["AutoHotKey go brrr!", "Zero latency!", "10,000 WPM!", "Bypassed!"]
+            },
+            {
+                id: "quantum",
+                name: "Quantum AI Copywriter",
+                avatar: "🤖",
+                desc: "Generates 10 million hyper-persuasive coupon slogans per millisecond.",
+                baseCost: 1600000,
+                basePps: 46000,
+                quotes: ["Optimizing conversion!", "Hallucinating savings!", "99.999% CTR!", "Beep boop!"]
+            },
+            {
+                id: "multiverse",
+                name: "Multiverse Warehouse God",
+                avatar: "🌌",
+                desc: "Types across parallel timelines so listings arrive before buyers are born.",
+                baseCost: 14000000,
+                basePps: 310000,
+                quotes: ["Omniversal free shipping!", "Infinite stock!", "Timeline merged!", "Ascended!"]
+            }
+        ];
+
+        /* =========================================================================
+           3. PERMANENT GEAR & BUFF UPGRADES DEFINITIONS
+           ========================================================================= */
+        const UPGRADE_ITEMS = [
+            {
+                id: "lube_switches",
+                name: "Krytox Switch Lube",
+                icon: "🛢️",
+                desc: "Doubles your manual keystroke cash value (+100% Key Power).",
+                cost: 50,
+                type: "click_mult",
+                val: 2
+            },
+            {
+                id: "pbt_keycaps",
+                name: "Double-Shot Pudding Keycaps",
+                icon: "🍬",
+                desc: "Your keystrokes also gain +4% of your passive Auto-Typist $/sec!",
+                cost: 350,
+                type: "click_pps_ratio",
+                val: 0.04
+            },
+            {
+                id: "energy_cooler",
+                name: "Wholesale Mango Energy Cooler",
+                icon: "🥤",
+                desc: "All hired Typists type 50% faster (+50% Global Passive Income).",
+                cost: 900,
+                type: "global_pps",
+                val: 1.5
+            },
+            {
+                id: "holy_panda",
+                name: "Tactile Holy Panda Switches",
+                icon: "🐼",
+                desc: "Triples your manual keystroke base value (3x Key Power).",
+                cost: 3200,
+                type: "click_mult",
+                val: 3
+            },
+            {
+                id: "dual_monitors",
+                name: "Quad Vertical Ultrawide Monitors",
+                icon: "🖥️",
+                desc: "Doubles the output of all hired Typists (2x Global Passive Income).",
+                cost: 12500,
+                type: "global_pps",
+                val: 2
+            },
+            {
+                id: "seo_keywords",
+                name: "Viral Clickbait Title Generator",
+                icon: "📈",
+                desc: "Completed product listings pay out 2.5x larger completion bonuses!",
+                cost: 42000,
+                type: "completion_mult",
+                val: 2.5
+            },
+            {
+                id: "rgb_underglow",
+                name: "16.8M Neon Studio Underglow",
+                icon: "🌈",
+                desc: "Unlocks RGB Terminal border & boosts ALL income by 75%!",
+                cost: 150000,
+                type: "all_mult",
+                val: 1.75
+            },
+            {
+                id: "gold_stabilizers",
+                name: "24K Gold-Plated Spacebar Stabs",
+                icon: "✨",
+                desc: "Keystrokes gain an extra +6% of your passive Auto-Typist $/sec!",
+                cost: 650000,
+                type: "click_pps_ratio",
+                val: 0.06
+            },
+            {
+                id: "neural_link",
+                name: "Brain-to-Keyboard Neural Link",
+                icon: "🧠",
+                desc: "Triples ALL passive and active typing income (3x Everything).",
+                cost: 4500000,
+                type: "all_mult",
+                val: 3
+            }
+        ];
+
+        /* =========================================================================
+           4. GAME STATE & CONFIGURATION
+           ========================================================================= */
+        let state = {
+            money: 0,
+            lifetimeMoney: 0,
+            listingsCompleted: 0,
+            mashMode: true, // If true, any key types the next correct letter
+            buyMultiplier: 1,
+            audioEnabled: true,
+            switchProfile: "blue",
+            goldenCoupons: 0,
+            typists: {},
+            upgrades: [],
+            wheelLastSpin: 0,
+            skills: {
+                overclock: { activeUntil: 0, cooldownUntil: 0, duration: 20000, cooldown: 60000 },
+                frenzy:    { activeUntil: 0, cooldownUntil: 0, duration: 25000, cooldown: 90000 },
+                autobot:   { activeUntil: 0, cooldownUntil: 0, duration: 15000, cooldown: 75000 }
+            },
+            tempWheelBuffUntil: 0
+        };
+
+        // Initialize default typist counts
+        TYPIST_TYPES.forEach(t => { state.typists[t.id] = 0; });
+
+        // Active Typing Session Variables
+        let currentPromptObj = PRODUCT_PROMPTS[0];
+        let currentCharIndex = 0;
+        let errorCharFlash = false;
+        let comboCount = 0;
+        let lastKeystrokeTime = 0;
+        let keystrokeTimestamps = [];
+        let wheelAngle = 0;
+
+        /* =========================================================================
+           5. WEB AUDIO SYNTHESIZER (Mechanical Switches & Cash Chimes)
+           ========================================================================= */
+        let audioCtx = null;
+
+        function ensureAudio() {
+            if (!state.audioEnabled) return null;
+            if (!audioCtx) {
+                const AudioContextClass = window.AudioContext || window.webkitAudioContext;
+                if (AudioContextClass) audioCtx = new AudioContextClass();
+            }
+            if (audioCtx && audioCtx.state === "suspended") {
+                audioCtx.resume();
+            }
+            return audioCtx;
+        }
+
+        function playKeyClick(isError = false) {
+            const ctx = ensureAudio();
+            if (!ctx) return;
+
+            const now = ctx.currentTime;
+            const osc = ctx.createOscillator();
+            const gain = ctx.createGain();
+            osc.connect(gain);
+            gain.connect(ctx.destination);
+
+            if (isError) {
+                osc.type = "sawtooth";
+                osc.frequency.setValueAtTime(150, now);
+                osc.frequency.linearRampToValueAtTime(95, now + 0.09);
+                gain.gain.setValueAtTime(0.12, now);
+                gain.gain.exponentialRampToValueAtTime(0.001, now + 0.09);
+                osc.start(now);
+                osc.stop(now + 0.09);
+                return;
+            }
+
+            const pitchJitter = (Math.random() - 0.5) * 45;
+
+            if (state.switchProfile === "blue") {
+                // Crisp high-pitched click + bottom out
+                osc.type = "triangle";
+                osc.frequency.setValueAtTime(1450 + pitchJitter, now);
+                osc.frequency.exponentialRampToValueAtTime(320, now + 0.045);
+                gain.gain.setValueAtTime(0.14, now);
+                gain.gain.exponentialRampToValueAtTime(0.001, now + 0.045);
+                osc.start(now);
+                osc.stop(now + 0.045);
+            } else if (state.switchProfile === "brown") {
+                // Deep thocky Holy Panda sound
+                osc.type = "sine";
+                osc.frequency.setValueAtTime(340 + pitchJitter * 0.5, now);
+                osc.frequency.exponentialRampToValueAtTime(110, now + 0.065);
+                gain.gain.setValueAtTime(0.22, now);
+                gain.gain.exponentialRampToValueAtTime(0.001, now + 0.065);
+                osc.start(now);
+                osc.stop(now + 0.065);
+            } else if (state.switchProfile === "red") {
+                // Soft linear tap
+                osc.type = "sine";
+                osc.frequency.setValueAtTime(520 + pitchJitter, now);
+                osc.frequency.exponentialRampToValueAtTime(190, now + 0.035);
+                gain.gain.setValueAtTime(0.1, now);
+                gain.gain.exponentialRampToValueAtTime(0.001, now + 0.035);
+                osc.start(now);
+                osc.stop(now + 0.035);
+            } else {
+                // Cyber Laser Pew
+                osc.type = "sawtooth";
+                osc.frequency.setValueAtTime(980 + pitchJitter, now);
+                osc.frequency.exponentialRampToValueAtTime(220, now + 0.06);
+                gain.gain.setValueAtTime(0.09, now);
+                gain.gain.exponentialRampToValueAtTime(0.001, now + 0.06);
+                osc.start(now);
+                osc.stop(now + 0.06);
+            }
+        }
+
+        function playCashSound() {
+            const ctx = ensureAudio();
+            if (!ctx) return;
+            const now = ctx.currentTime;
+            const notes = [587.33, 880, 1174.66]; // D5, A5, D6
+            notes.forEach((freq, idx) => {
+                const osc = ctx.createOscillator();
+                const gain = ctx.createGain();
+                osc.type = "triangle";
+                osc.frequency.setValueAtTime(freq, now + idx * 0.055);
+                gain.gain.setValueAtTime(0.14, now + idx * 0.055);
+                gain.gain.exponentialRampToValueAtTime(0.001, now + idx * 0.055 + 0.22);
+                osc.connect(gain);
+                gain.connect(ctx.destination);
+                osc.start(now + idx * 0.055);
+                osc.stop(now + idx * 0.055 + 0.22);
+            });
+        }
+
+        /* =========================================================================
+           6. ECONOMY CALCULATIONS (PPS, KEYSTROKE VALUE, MULTIPLIERS)
+           ========================================================================= */
+        function getGoldenCouponMultiplier() {
+            return 1 + (state.goldenCoupons * 0.25);
+        }
+
+        function getAllIncomeMultiplier() {
+            let mult = getGoldenCouponMultiplier();
+            UPGRADE_ITEMS.forEach(up => {
+                if (up.type === "all_mult" && state.upgrades.includes(up.id)) {
+                    mult *= up.val;
+                }
+            });
+            if (Date.now() < state.tempWheelBuffUntil) {
+                mult *= 2; // 2x from Coupon Wheel buff
+            }
+            return mult;
+        }
+
+        function getTypistSinglePps(typistObj) {
+            const count = state.typists[typistObj.id] || 0;
+            // Every 10 levels doubles this typist's output
+            const milestoneBonus = Math.pow(2, Math.floor(count / 10));
+            let globalPpsMult = 1;
+            UPGRADE_ITEMS.forEach(up => {
+                if (up.type === "global_pps" && state.upgrades.includes(up.id)) {
+                    globalPpsMult *= up.val;
+                }
+            });
+            if (Date.now() < state.skills.frenzy.activeUntil) {
+                globalPpsMult *= 2.5;
+            }
+            return typistObj.basePps * milestoneBonus * globalPpsMult * getAllIncomeMultiplier();
+        }
+
+        function getTotalPps() {
+            let total = 0;
+            TYPIST_TYPES.forEach(t => {
+                const count = state.typists[t.id] || 0;
+                if (count > 0) {
+                    total += count * getTypistSinglePps(t);
+                }
+            });
+            return total;
+        }
+
+        function getComboMultiplier() {
+            // Up to 3.5x multiplier at 125 combo
+            return 1 + Math.min(2.5, Math.floor(comboCount / 5) * 0.1);
+        }
+
+        function getKeystrokeValue() {
+            let base = 1;
+            let ppsRatio = 0;
+            UPGRADE_ITEMS.forEach(up => {
+                if (state.upgrades.includes(up.id)) {
+                    if (up.type === "click_mult") base *= up.val;
+                    if (up.type === "click_pps_ratio") ppsRatio += up.val;
+                }
+            });
+
+            let val = (base * getAllIncomeMultiplier()) + (getTotalPps() * ppsRatio);
+            val *= getComboMultiplier();
+
+            if (Date.now() < state.skills.overclock.activeUntil) {
+                val *= 3;
+            }
+            return Math.max(1, val);
+        }
+
+        function getListingCompletionBonus() {
+            const charCount = currentPromptObj.text.length;
+            let mult = 1;
+            UPGRADE_ITEMS.forEach(up => {
+                if (up.type === "completion_mult" && state.upgrades.includes(up.id)) {
+                    mult *= up.val;
+                }
+            });
+            // Base bonus scales with keystroke power + 3 seconds of passive income
+            return (getKeystrokeValue() * (charCount * 0.45) + getTotalPps() * 3.5) * mult;
+        }
+
+        /* =========================================================================
+           7. FORMATTING HELPERS & FLOATING PARTICLES
+           ========================================================================= */
+        function formatNumber(n) {
+            if (n < 1000) return n % 1 === 0 ? n.toFixed(0) : n.toFixed(1);
+            const suffixes = ["", "K", "M", "B", "T", "Qa", "Qi"];
+            const tier = Math.floor(Math.log10(Math.abs(n)) / 3);
+            if (tier === 0) return n.toFixed(0);
+            const suffix = suffixes[tier] || `e${tier * 3}`;
+            const scale = Math.pow(10, tier * 3);
+            const scaled = n / scale;
+            return scaled.toFixed(2) + suffix;
+        }
+
+        function spawnFloatingText(x, y, text, colorClass = "text-emerald-400 text-lg") {
+            const el = document.createElement("div");
+            el.className = `floating-particle ${colorClass}`;
+            el.style.left = `${x + (Math.random() * 26 - 13)}px`;
+            el.style.top = `${y - 10}px`;
+            el.textContent = text;
+            document.body.appendChild(el);
+            setTimeout(() => el.remove(), 900);
+        }
+
+        function showToast(message, icon = "🔥") {
+            const container = document.getElementById("toast-container");
+            const toast = document.createElement("div");
+            toast.className = "bg-[#181e36] border-2 border-orange-500 text-white px-4 py-2.5 rounded-2xl shadow-2xl flex items-center gap-2.5 text-xs font-bold animate-bounce";
+            toast.innerHTML = `<span class="text-lg">${icon}</span><span>${message}</span>`;
+            container.appendChild(toast);
+            setTimeout(() => toast.remove(), 3200);
+        }
+
+        /* =========================================================================
+           8. INTERACTIVE TYPING TERMINAL ENGINE
+           ========================================================================= */
+        function loadNewPrompt() {
+            const nextIndex = Math.floor(Math.random() * PRODUCT_PROMPTS.length);
+            currentPromptObj = PRODUCT_PROMPTS[nextIndex];
+            currentCharIndex = 0;
+
+            document.getElementById("product-emoji").textContent = currentPromptObj.emoji;
+            document.getElementById("product-tag").textContent = currentPromptObj.tag;
+            document.getElementById("product-title").textContent = currentPromptObj.title;
+            renderPromptText();
+        }
+
+        function renderPromptText() {
+            const container = document.getElementById("prompt-container");
+            const text = currentPromptObj.text;
+            let html = "";
+
+            for (let i = 0; i < text.length; i++) {
+                const ch = text[i] === " " ? "&nbsp;" : text[i];
+                if (i < currentCharIndex) {
+                    html += `<span class="char-done">${ch}</span>`;
+                } else if (i === currentCharIndex) {
+                    const cls = errorCharFlash ? "char-error" : "char-current";
+                    html += `<span class="${cls}">${ch}</span>`;
+                } else {
+                    html += `<span class="char-pending">${ch}</span>`;
+                }
+            }
+            container.innerHTML = html;
+
+            const pct = Math.min(100, (currentCharIndex / text.length) * 100);
+            document.getElementById("prompt-progress-bar").style.width = `${pct}%`;
+            document.getElementById("typing-progress-text").textContent = `${currentCharIndex} / ${text.length} chars`;
+            document.getElementById("product-bonus-label").textContent = `Completion Bonus: +$${formatNumber(getListingCompletionBonus())}`;
+        }
+
+        function advanceCharacter(clientX, clientY) {
+            const text = currentPromptObj.text;
+            const expectedChar = text[currentCharIndex];
+
+            // Highlight virtual keyboard key
+            highlightVirtualKey(expectedChar);
+
+            currentCharIndex++;
+            comboCount++;
+            lastKeystrokeTime = Date.now();
+            keystrokeTimestamps.push(lastKeystrokeTime);
+
+            // Grant per-keystroke money
+            const gain = getKeystrokeValue();
+            addMoney(gain);
+            playKeyClick(false);
+
+            // Micro shake feedback on terminal
+            const arena = document.getElementById("typing-arena");
+            arena.classList.remove("shake-hit");
+            void arena.offsetWidth;
+            arena.classList.add("shake-hit");
+
+            // Floating dollar particle
+            const rect = arena.getBoundingClientRect();
+            const px = clientX || (rect.left + rect.width * 0.5 + (Math.random() * 120 - 60));
+            const py = clientY || (rect.top + rect.height * 0.45);
+            spawnFloatingText(px, py, `+$${formatNumber(gain)}`, "text-emerald-400 text-base");
+
+            // Check if entire product listing is finished
+            if (currentCharIndex >= text.length) {
+                const bonus = getListingCompletionBonus();
+                addMoney(bonus);
+                state.listingsCompleted++;
+                playCashSound();
+
+                spawnFloatingText(
+                    rect.left + rect.width / 2,
+                    rect.top + 20,
+                    `📦 LISTING SHIPPED! +$${formatNumber(bonus)}`,
+                    "text-amber-300 text-xl"
+                );
+
+                loadNewPrompt();
+            } else {
+                renderPromptText();
+            }
+
+            updateDashboardUI();
+        }
+
+        function handleKeyDown(e) {
+            // Ignore shortcuts like Ctrl+R, F12, or typing inside modals
+            if (e.ctrlKey || e.metaKey || e.altKey) return;
+            if (["Shift", "Control", "Alt", "Meta", "CapsLock", "Tab", "Escape"].includes(e.key)) return;
+
+            // Prevent spacebar from scrolling the page
+            if (e.key === " " || e.code === "Space") {
+                e.preventDefault();
+            }
+
+            const expectedChar = currentPromptObj.text[currentCharIndex];
+            if (!expectedChar) return;
+
+            if (state.mashMode) {
+                // Mash mode: any key advances the prompt
+                advanceCharacter();
+            } else {
+                // Precision mode: must match expected character (case-insensitive)
+                if (e.key.toLowerCase() === expectedChar.toLowerCase()) {
+                    advanceCharacter();
+                } else {
+                    // Typo penalty: reset portion of combo
+                    comboCount = Math.max(0, Math.floor(comboCount * 0.5));
+                    errorCharFlash = true;
+                    playKeyClick(true);
+                    renderPromptText();
+                    setTimeout(() => {
+                        errorCharFlash = false;
+                        renderPromptText();
+                    }, 180);
+                    updateDashboardUI();
+                }
+            }
+        }
+
+        function triggerManualKeystroke(e) {
+            const x = e && e.clientX ? e.clientX : null;
+            const y = e && e.clientY ? e.clientY : null;
+            advanceCharacter(x, y);
+        }
+
+        function toggleMashMode() {
+            state.mashMode = !state.mashMode;
+            const btn = document.getElementById("btn-mode-toggle");
+            const label = document.getElementById("label-mode");
+            if (state.mashMode) {
+                btn.className = "px-3 py-1 rounded-full text-xs font-extrabold border transition flex items-center gap-1.5 bg-emerald-500/20 border-emerald-400 text-emerald-300";
+                label.textContent = "Mode: Smart Type / Mash";
+            } else {
+                btn.className = "px-3 py-1 rounded-full text-xs font-extrabold border transition flex items-center gap-1.5 bg-amber-500/20 border-amber-400 text-amber-300";
+                label.textContent = "Mode: Strict Accuracy";
+            }
+        }
+
+        function focusTypingArena() {
+            document.getElementById("typing-arena").focus();
+        }
+
+        /* =========================================================================
+           9. MINI MECHANICAL KEYBOARD VISUALIZER
+           ========================================================================= */
+        const KB_ROWS = [
+            ["Q","W","E","R","T","Y","U","I","O","P"],
+            ["A","S","D","F","G","H","J","K","L"],
+            ["Z","X","C","V","B","N","M"]
+        ];
+
+        function initVirtualKeyboard() {
+            KB_ROWS.forEach((row, idx) => {
+                const rowEl = document.getElementById(`kb-row-${idx + 1}`);
+                rowEl.innerHTML = row.map(k => `
+                    <div id="vkey-${k}" class="w-7 h-6 rounded bg-slate-800 border-b-2 border-slate-950 flex items-center justify-center text-[10px] font-mono-code font-bold text-slate-300 transition-all duration-75">
+                        ${k}
+                    </div>
+                `).join("");
+            });
+        }
+
+        function highlightVirtualKey(ch) {
+            if (!ch) return;
+            const upper = ch.toUpperCase();
+            const el = upper === " " ? document.getElementById("kb-space") : document.getElementById(`vkey-${upper}`);
+            if (!el) return;
+
+            el.classList.add("bg-orange-500", "text-white", "translate-y-0.5");
+            el.classList.remove("bg-slate-800", "text-slate-300");
+            setTimeout(() => {
+                el.classList.remove("bg-orange-500", "text-white", "translate-y-0.5");
+                el.classList.add("bg-slate-800", "text-slate-300");
+            }, 110);
+        }
+
+        /* =========================================================================
+           10. SHOP RENDERING: TYPIST ROSTER & GEAR UPGRADES
+           ========================================================================= */
+        function getTypistBulkCost(typistObj, qty) {
+            const owned = state.typists[typistObj.id] || 0;
+            const rate = 1.15;
+            if (qty === "max") {
+                let count = 0;
+                let totalCost = 0;
+                let nextCost = typistObj.baseCost * Math.pow(rate, owned);
+                while (state.money >= totalCost + nextCost && count < 100) {
+                    totalCost += nextCost;
+                    count++;
+                    nextCost = typistObj.baseCost * Math.pow(rate, owned + count);
+                }
+                if (count === 0) {
+                    return { count: 1, cost: nextCost };
+                }
+                return { count, cost: totalCost };
+            } else {
+                let totalCost = 0;
+                for (let i = 0; i < qty; i++) {
+                    totalCost += typistObj.baseCost * Math.pow(rate, owned + i);
+                }
+                return { count: qty, cost: totalCost };
+            }
+        }
+
+        function renderTypistShop() {
+            const container = document.getElementById("shop-panel-typists");
+            let html = "";
+
+            TYPIST_TYPES.forEach(t => {
+                const owned = state.typists[t.id] || 0;
+                const bulk = getTypistBulkCost(t, state.buyMultiplier);
+                const canAfford = state.money >= bulk.cost;
+                const singlePps = getTypistSinglePps(t);
+                const nextMilestone = (Math.floor(owned / 10) + 1) * 10;
+                const milestonePct = ((owned % 10) / 10) * 100;
+
+                html += `
+                <div class="p-3 rounded-2xl bg-[#161b2e] border ${canAfford ? 'border-slate-700 hover:border-orange-500/70' : 'border-slate-800/70 opacity-75'} transition flex flex-col gap-2">
+                    <div class="flex items-center justify-between gap-2">
+                        <div class="flex items-center gap-2.5">
+                            <div class="w-11 h-11 rounded-2xl bg-slate-900 border border-slate-700 flex items-center justify-center text-2xl shrink-0">
+                                ${t.avatar}
+                            </div>
+                            <div>
+                                <div class="flex items-center gap-1.5">
+                                    <h4 class="font-bold text-xs sm:text-sm text-white">${t.name}</h4>
+                                    <span class="px-1.5 py-0.2 rounded bg-orange-500/20 text-orange-300 font-mono-code text-[10px] font-bold">
+                                        Lv.${owned}
+                                    </span>
+                                </div>
+                                <div class="text-[11px] text-emerald-400 font-mono-code font-bold">
+                                    +$${formatNumber(singlePps)}/s each
+                                </div>
+                            </div>
+                        </div>
+
+                        <button onclick="buyTypist('${t.id}')" ${canAfford ? '' : 'disabled'}
+                            class="px-3 py-2 rounded-xl font-display font-bold text-xs transition shrink-0 ${canAfford ? 'bg-gradient-to-r from-orange-500 to-amber-500 hover:brightness-110 text-slate-950 shadow-md cursor-pointer' : 'bg-slate-800 text-slate-500 cursor-not-allowed'}">
+                            <div>Hire +${bulk.count}</div>
+                            <div class="font-mono-code text-[11px]">$${formatNumber(bulk.cost)}</div>
+                        </button>
+                    </div>
+
+                    <p class="text-[11px] text-slate-400 leading-snug">${t.desc}</p>
+
+                    <!-- Milestone 2x Progress Bar -->
+                    <div class="flex items-center gap-2 text-[10px] text-slate-400">
+                        <div class="flex-1 bg-slate-900 h-1.5 rounded-full overflow-hidden">
+                            <div class="bg-amber-400 h-full transition-all" style="width:${milestonePct}%"></div>
+                        </div>
+                        <span>2x at Lv.${nextMilestone}</span>
+                    </div>
+                </div>`;
+            });
+
+            container.innerHTML = html;
+        }
+
+        function renderUpgradeShop() {
+            const container = document.getElementById("shop-panel-upgrades");
+            let html = "";
+            let availableCount = 0;
+
+            UPGRADE_ITEMS.forEach(up => {
+                const isBought = state.upgrades.includes(up.id);
+                const canAfford = !isBought && state.money >= up.cost;
+                if (canAfford) availableCount++;
+
+                html += `
+                <div class="p-3 rounded-2xl bg-[#161b2e] border ${isBought ? 'border-emerald-500/40 bg-emerald-950/10' : canAfford ? 'border-amber-400/70' : 'border-slate-800 opacity-75'} transition flex items-center justify-between gap-3">
+                    <div class="flex items-center gap-3">
+                        <div class="w-10 h-10 rounded-xl bg-slate-900 border border-slate-700 flex items-center justify-center text-xl shrink-0">
+                            ${up.icon}
+                        </div>
+                        <div>
+                            <h4 class="font-bold text-xs sm:text-sm text-white">${up.name}</h4>
+                            <p class="text-[11px] text-slate-400 leading-snug">${up.desc}</p>
+                        </div>
+                    </div>
+
+                    ${isBought ? `
+                        <span class="px-2.5 py-1 rounded-xl bg-emerald-500/20 text-emerald-300 font-bold text-[10px] shrink-0">
+                            OWNED ✓
+                        </span>
+                    ` : `
+                        <button onclick="buyUpgrade('${up.id}')" ${canAfford ? '' : 'disabled'}
+                            class="px-3 py-2 rounded-xl font-display font-bold text-xs shrink-0 transition ${canAfford ? 'bg-gradient-to-r from-amber-400 to-orange-500 text-slate-950 cursor-pointer shadow' : 'bg-slate-800 text-slate-500 cursor-not-allowed'}">
+                            $${formatNumber(up.cost)}
+                        </button>
+                    `}
+                </div>`;
+            });
+
+            container.innerHTML = html;
+            document.getElementById("upgrade-count-badge").textContent = availableCount;
+        }
+
+        function buyTypist(id) {
+            const typistObj = TYPIST_TYPES.find(t => t.id === id);
+            if (!typistObj) return;
+            const bulk = getTypistBulkCost(typistObj, state.buyMultiplier);
+            if (state.money < bulk.cost) return;
+
+            state.money -= bulk.cost;
+            state.typists[id] = (state.typists[id] || 0) + bulk.count;
+            playCashSound();
+            renderOfficeFloor();
+            renderTypistShop();
+            renderUpgradeShop();
+            updateDashboardUI();
+        }
+
+        function buyUpgrade(id) {
+            const up = UPGRADE_ITEMS.find(u => u.id === id);
+            if (!up || state.upgrades.includes(id) || state.money < up.cost) return;
+
+            state.money -= up.cost;
+            state.upgrades.push(id);
+            playCashSound();
+            showToast(`Unlocked ${up.name}!`, up.icon);
+
+            if (id === "rgb_underglow") {
+                document.getElementById("terminal-card").classList.add("rgb-unlocked");
+            }
+
+            renderTypistShop();
+            renderUpgradeShop();
+            renderPromptText();
+            updateDashboardUI();
+        }
+
+        function switchShopTab(tab) {
+            const btnTypists = document.getElementById("tab-btn-typists");
+            const btnUpgrades = document.getElementById("tab-btn-upgrades");
+            const panelTypists = document.getElementById("shop-panel-typists");
+            const panelUpgrades = document.getElementById("shop-panel-upgrades");
+
+            if (tab === "typists") {
+                panelTypists.classList.remove("hidden");
+                panelUpgrades.classList.add("hidden");
+                btnTypists.className = "py-2.5 rounded-2xl font-display font-bold text-xs sm:text-sm transition flex items-center justify-center gap-1.5 bg-gradient-to-r from-orange-500 to-red-500 text-white shadow";
+                btnUpgrades.className = "py-2.5 rounded-2xl font-display font-bold text-xs sm:text-sm transition flex items-center justify-center gap-1.5 text-slate-400 hover:text-white";
+            } else {
+                panelTypists.classList.add("hidden");
+                panelUpgrades.classList.remove("hidden");
+                btnUpgrades.className = "py-2.5 rounded-2xl font-display font-bold text-xs sm:text-sm transition flex items-center justify-center gap-1.5 bg-gradient-to-r from-orange-500 to-red-500 text-white shadow";
+                btnTypists.className = "py-2.5 rounded-2xl font-display font-bold text-xs sm:text-sm transition flex items-center justify-center gap-1.5 text-slate-400 hover:text-white";
+            }
+        }
+
+        function setBuyMultiplier(val) {
+            state.buyMultiplier = val;
+            [1, 10, "max"].forEach(m => {
+                const btn = document.getElementById(`buy-mult-${m}`);
+                if (m === val) {
+                    btn.className = "px-2.5 py-0.5 rounded-lg font-bold bg-orange-500 text-white";
+                } else {
+                    btn.className = "px-2.5 py-0.5 rounded-lg font-bold bg-slate-800 text-slate-400 hover:text-white";
+                }
+            });
+            renderTypistShop();
+        }
+
+        /* =========================================================================
+           11. VISUAL TYPIST WAREHOUSE FLOOR
+           ========================================================================= */
+        function renderOfficeFloor() {
+            const grid = document.getElementById("office-floor-grid");
+            let totalStaff = 0;
+            let html = "";
+
+            TYPIST_TYPES.forEach(t => {
+                const count = state.typists[t.id] || 0;
+                totalStaff += count;
+                if (count > 0) {
+                    const totalTierPps = count * getTypistSinglePps(t);
+                    const randomQuote = t.quotes[Math.floor(Math.random() * t.quotes.length)];
+                    html += `
+                    <div id="desk-${t.id}" class="p-3 rounded-2xl bg-[#0c0f1d] border border-slate-800 flex flex-col justify-between relative overflow-hidden group hover:border-orange-500/50 transition">
+                        <div class="flex items-center justify-between">
+                            <span class="text-[10px] font-mono-code font-extrabold px-2 py-0.5 rounded-md bg-orange-500/15 text-orange-300">
+                                x${count}
+                            </span>
+                            <span class="text-[10px] font-mono-code text-emerald-400 font-bold">
+                                $${formatNumber(totalTierPps)}/s
+                            </span>
+                        </div>
+
+                        <div class="my-3 flex flex-col items-center">
+                            <div class="text-3xl typist-active select-none">${t.avatar}</div>
+                            <div class="w-12 h-2 rounded bg-slate-700 mt-1 flex items-center justify-around px-1">
+                                <span class="w-1.5 h-1 bg-orange-400 rounded-full animate-ping"></span>
+                                <span class="w-1.5 h-1 bg-cyan-400 rounded-full"></span>
+                            </div>
+                        </div>
+
+                        <div class="text-center">
+                            <div class="font-bold text-xs text-slate-200 truncate">${t.name}</div>
+                            <div id="quote-${t.id}" class="text-[10px] text-amber-300/90 italic truncate mt-0.5">"${randomQuote}"</div>
+                        </div>
+                    </div>`;
+                }
+            });
+
+            if (totalStaff === 0) {
+                html = `
+                <div class="col-span-full py-14 text-center text-slate-500 flex flex-col items-center gap-2">
+                    <i class="fa-solid fa-chair text-3xl text-slate-700"></i>
+                    <div class="text-sm font-bold text-slate-400">Your Warehouse Floor is Empty!</div>
+                    <div class="text-xs max-w-xs">Type listings on the left to earn your first $15, then hire a <strong class="text-orange-400">One-Finger Bargain Uncle</strong> on the right!</div>
+                </div>`;
+            }
+
+            grid.innerHTML = html;
+            document.getElementById("stat-total-typists").textContent = `${totalStaff} Staff`;
+        }
+
+        /* =========================================================================
+           12. ACTIVE FLASH SKILLS, MYSTERY PARCEL & COUPON WHEEL
+           ========================================================================= */
+        function activateSkill(skillKey) {
+            const now = Date.now();
+            const sk = state.skills[skillKey];
+            if (!sk || now < sk.cooldownUntil) return;
+
+            sk.activeUntil = now + sk.duration;
+            sk.cooldownUntil = now + sk.cooldown;
+            playCashSound();
+
+            if (skillKey === "overclock") {
+                showToast("3x KEYSTROKE SURGE ACTIVE FOR 20s!", "⚡");
+            } else if (skillKey === "frenzy") {
+                showToast("2.5x AUTO-FACTORY OVERDRIVE FOR 25s!", "🚚");
+            } else if (skillKey === "autobot") {
+                showToast("TURBO SCRIPT BOT AUTO-TYPING FOR 15s!", "🤖");
+            }
+            updateDashboardUI();
+        }
+
+        function spawnMysteryParcel() {
+            const banner = document.getElementById("mystery-drone-banner");
+            banner.classList.remove("hidden");
+            banner.classList.add("flex");
+            setTimeout(() => {
+                banner.classList.add("hidden");
+                banner.classList.remove("flex");
+            }, 14000);
+        }
+
+        function claimMysteryParcel(e) {
+            const banner = document.getElementById("mystery-drone-banner");
+            banner.classList.add("hidden");
+            banner.classList.remove("flex");
+
+            const reward = Math.max(50, getTotalPps() * 20 + getKeystrokeValue() * 25);
+            addMoney(reward);
+            playCashSound();
+
+            if (e && e.clientX) {
+                spawnFloatingText(e.clientX, e.clientY, `📦 +$${formatNumber(reward)}!`, "text-amber-300 text-2xl");
+            }
+            showToast(`Claimed Airdrop Parcel: +$${formatNumber(reward)}!`, "📦");
+            updateDashboardUI();
+        }
+
+        function openWheelModal() {
+            document.getElementById("modal-wheel").classList.remove("hidden");
+            document.getElementById("modal-wheel").classList.add("flex");
+        }
+
+        function closeWheelModal() {
+            document.getElementById("modal-wheel").classList.add("hidden");
+            document.getElementById("modal-wheel").classList.remove("flex");
+        }
+
+        function spinCouponWheel() {
+            const now = Date.now();
+            const cooldown = 60000;
+            if (now - state.wheelLastSpin < cooldown) return;
+
+            state.wheelLastSpin = now;
+            const btn = document.getElementById("btn-spin-action");
+            btn.disabled = true;
+            btn.textContent = "SPINNING...";
+
+            const extraSpins = 1440 + Math.floor(Math.random() * 1080);
+            wheelAngle += extraSpins;
+            document.getElementById("wheel-spinner").style.transform = `rotate(${wheelAngle}deg)`;
+
+            setTimeout(() => {
+                const outcomes = [
+                    { label: "💰 JACKPOT! +30s of Revenue!", fn: () => { const r = Math.max(100, getTotalPps() * 30 + getKeystrokeValue() * 35); addMoney(r); return `Won +$${formatNumber(r)} Cash!`; } },
+                    { label: "🔥 2X ALL INCOME FOR 45 SECONDS!", fn: () => { state.tempWheelBuffUntil = Date.now() + 45000; return "Activated 2x All Income Buff (45s)!"; } },
+                    { label: "⚡ INSTANT SKILL COOLDOWN RESET!", fn: () => { Object.values(state.skills).forEach(s => s.cooldownUntil = 0); return "All Flash Skills Refreshed!"; } },
+                    { label: "🎁 MEGA BUNDLE! +60s of Revenue!", fn: () => { const r = Math.max(250, getTotalPps() * 60 + getKeystrokeValue() * 60); addMoney(r); return `Won Mega Bundle +$${formatNumber(r)}!`; } }
+                ];
+                const pick = outcomes[Math.floor(Math.random() * outcomes.length)];
+                const msg = pick.fn();
+                playCashSound();
+                document.getElementById("wheel-result-box").textContent = msg;
+                showToast(msg, "🎡");
+                updateDashboardUI();
+            }, 3250);
+        }
+
+        /* =========================================================================
+           13. PRESTIGE (REBIRTH) & SAVE MANAGEMENT
+           ========================================================================= */
+        function getClaimableCoupons() {
+            if (state.lifetimeMoney < 25000) return 0;
+            const totalEarnedCoupons = Math.floor(Math.sqrt(state.lifetimeMoney / 25000));
+            return Math.max(0, totalEarnedCoupons - state.goldenCoupons);
+        }
+
+        function openPrestigeModal() {
+            document.getElementById("prestige-current-coupons").textContent = state.goldenCoupons;
+            document.getElementById("prestige-claim-coupons").textContent = `+${getClaimableCoupons()}`;
+            document.getElementById("modal-prestige").classList.remove("hidden");
+            document.getElementById("modal-prestige").classList.add("flex");
+        }
+
+        function closePrestigeModal() {
+            document.getElementById("modal-prestige").classList.add("hidden");
+            document.getElementById("modal-prestige").classList.remove("flex");
+        }
+
+        function confirmPrestige() {
+            const claimable = getClaimableCoupons();
+            if (claimable <= 0) {
+                showToast("Need more lifetime earnings to claim new Golden Coupons!", "⚠️");
+                return;
+            }
+            state.goldenCoupons += claimable;
+            state.money = 0;
+            TYPIST_TYPES.forEach(t => { state.typists[t.id] = 0; });
+            state.upgrades = [];
+            comboCount = 0;
+
+            document.getElementById("terminal-card").classList.remove("rgb-unlocked");
+            closePrestigeModal();
+            playCashSound();
+            showToast(`Rebirth Complete! Now holding ${state.goldenCoupons} Golden Coupons!`, "🏭");
+            renderOfficeFloor();
+            renderTypistShop();
+            renderUpgradeShop();
+            updateDashboardUI();
+            saveGame();
+        }
+
+        function toggleAudio() {
+            state.audioEnabled = !state.audioEnabled;
+            const icon = document.getElementById("icon-audio");
+            const btn = document.getElementById("btn-audio-toggle");
+            if (state.audioEnabled) {
+                icon.className = "fa-solid fa-volume-high";
+                btn.classList.replace("text-slate-500", "text-emerald-400");
+            } else {
+                icon.className = "fa-solid fa-volume-xmark";
+                btn.classList.replace("text-emerald-400", "text-slate-500");
+            }
+        }
+
+        function changeSwitchProfile(val) {
+            state.switchProfile = val;
+            playKeyClick(false);
+        }
+
+        function addMoney(amount) {
+            state.money += amount;
+            state.lifetimeMoney += amount;
+        }
+
+        function saveGame() {
+            try {
+                localStorage.setItem("temu_typis_save_v1", JSON.stringify(state));
+            } catch (e) {}
+        }
+
+        function manualSave() {
+            saveGame();
+            showToast("Progress saved to local storage!", "💾");
+        }
+
+        function loadGame() {
+            try {
+                const raw = localStorage.getItem("temu_typis_save_v1");
+                if (!raw) return;
+                const parsed = JSON.parse(raw);
+                state = { ...state, ...parsed };
+                TYPIST_TYPES.forEach(t => {
+                    if (typeof state.typists[t.id] !== "number") state.typists[t.id] = 0;
+                });
+                if (state.upgrades.includes("rgb_underglow")) {
+                    document.getElementById("terminal-card").classList.add("rgb-unlocked");
+                }
+            } catch (e) {}
+        }
+
+        function openResetModal() {
+            document.getElementById("modal-reset").classList.remove("hidden");
+            document.getElementById("modal-reset").classList.add("flex");
+        }
+
+        function closeResetModal() {
+            document.getElementById("modal-reset").classList.add("hidden");
+            document.getElementById("modal-reset").classList.remove("flex");
+        }
+
+        function confirmHardReset() {
+            localStorage.removeItem("temu_typis_save_v1");
+            location.reload();
+        }
+
+        /* =========================================================================
+           14. MAIN DASHBOARD UPDATE & GAME LOOP
+           ========================================================================= */
+        function updateDashboardUI() {
+            document.getElementById("stat-money").textContent = `$${formatNumber(state.money)}`;
+            document.getElementById("stat-pps").textContent = `$${formatNumber(getTotalPps())}/s`;
+            document.getElementById("stat-kpc").textContent = `$${formatNumber(getKeystrokeValue())}`;
+            document.getElementById("stat-coupons").textContent = `${state.goldenCoupons} (+${state.goldenCoupons * 25}%)`;
+            document.getElementById("stat-listings-done").textContent = state.listingsCompleted;
+
+            // Combo & WPM calculation
+            const now = Date.now();
+            keystrokeTimestamps = keystrokeTimestamps.filter(t => now - t < 10000);
+            const wpm = Math.round((keystrokeTimestamps.length / 5) * 6);
+            document.getElementById("stat-combo").innerHTML = `${getComboMultiplier().toFixed(2)}x <span class="text-xs text-slate-400">(${comboCount})</span>`;
+            document.getElementById("stat-wpm").textContent = `${wpm} WPM`;
+
+            // Update Skill Buttons & Active Buff Bar
+            const buffBar = document.getElementById("active-buffs-bar");
+            let buffHtml = "";
+
+            const skillNames = {
+                overclock: { title: "⚡ 3x Keystroke Surge", color: "bg-orange-500/20 border-orange-400 text-orange-300" },
+                frenzy:    { title: "🚚 2.5x Auto-Factory", color: "bg-cyan-500/20 border-cyan-400 text-cyan-300" },
+                autobot:   { title: "🤖 Turbo Script Bot", color: "bg-purple-500/20 border-purple-400 text-purple-300" }
+            };
+
+            Object.keys(state.skills).forEach(k => {
+                const sk = state.skills[k];
+                const statusEl = document.getElementById(`skill-status-${k}`);
+                if (now < sk.activeUntil) {
+                    const rem = Math.ceil((sk.activeUntil - now) / 1000);
+                    statusEl.className = "text-[10px] font-extrabold px-2 py-0.5 rounded-full bg-amber-400 text-slate-950 animate-pulse";
+                    statusEl.textContent = `ACTIVE ${rem}s`;
+                    buffHtml += `<div class="px-3 py-1 rounded-full border text-xs font-extrabold ${skillNames[k].color}">${skillNames[k].title}: ${rem}s</div>`;
+                } else if (now < sk.cooldownUntil) {
+                    const cd = Math.ceil((sk.cooldownUntil - now) / 1000);
+                    statusEl.className = "text-[10px] font-extrabold px-2 py-0.5 rounded-full bg-slate-800 text-slate-400";
+                    statusEl.textContent = `${cd}s CD`;
+                } else {
+                    statusEl.className = "text-[10px] font-extrabold px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300";
+                    statusEl.textContent = "READY";
+                }
+            });
+
+            if (now < state.tempWheelBuffUntil) {
+                const rem = Math.ceil((state.tempWheelBuffUntil - now) / 1000);
+                buffHtml += `<div class="px-3 py-1 rounded-full border text-xs font-extrabold bg-amber-500/20 border-amber-400 text-amber-300">🎡 Wheel 2x All Income: ${rem}s</div>`;
+            }
+
+            buffBar.innerHTML = buffHtml;
+
+            // Update Coupon Wheel Badge
+            const wheelBadge = document.getElementById("wheel-badge");
+            const spinBtn = document.getElementById("btn-spin-action");
+            const wheelRem = Math.ceil((60000 - (now - state.wheelLastSpin)) / 1000);
+            if (wheelRem > 0) {
+                wheelBadge.textContent = `${wheelRem}s`;
+                wheelBadge.className = "ml-1 px-1.5 py-0.2 bg-slate-900 text-amber-300 rounded-full text-[10px]";
+                if (spinBtn) {
+                    spinBtn.disabled = true;
+                    spinBtn.textContent = `NEXT SPIN IN ${wheelRem}s`;
+                }
+            } else {
+                wheelBadge.textContent = "READY";
+                wheelBadge.className = "ml-1 px-1.5 py-0.2 bg-red-600 text-white rounded-full text-[10px]";
+                if (spinBtn) {
+                    spinBtn.disabled = false;
+                    spinBtn.textContent = "SPIN FOR FREE NOW!";
+                }
+            }
+        }
+
+        // Initialize Everything on Window Load
+        window.onload = function () {
+            loadGame();
+            initVirtualKeyboard();
+            loadNewPrompt();
+            renderOfficeFloor();
+            renderTypistShop();
+            renderUpgradeShop();
+            updateDashboardUI();
+
+            // Global Keydown Listener for Seamless Typing
+            window.addEventListener("keydown", handleKeyDown);
+
+            // Core 100ms Tick Loop (Passive income, Auto-Bot skill, Combo decay)
+            let tickCounter = 0;
+            setInterval(() => {
+                const now = Date.now();
+                const pps = getTotalPps();
+                if (pps > 0) {
+                    addMoney(pps * 0.1);
+                }
+
+                // Auto-Bot Skill types 1.2 characters per 100ms (12 chars/sec)
+                if (now < state.skills.autobot.activeUntil) {
+                    advanceCharacter();
+                }
+
+                // Combo decays if idle for more than 4.5 seconds
+                if (comboCount > 0 && now - lastKeystrokeTime > 4500) {
+                    comboCount = Math.max(0, comboCount - 1);
+                }
+
+                tickCounter++;
+                if (tickCounter % 5 === 0) {
+                    renderTypistShop();
+                    renderUpgradeShop();
+                    renderPromptText();
+                }
+
+                // Rotate funny quotes & spawn visual particles on warehouse floor
+                if (tickCounter % 35 === 0) {
+                    TYPIST_TYPES.forEach(t => {
+                        if ((state.typists[t.id] || 0) > 0) {
+                            const qEl = document.getElementById(`quote-${t.id}`);
+                            if (qEl) {
+                                qEl.textContent = `"${t.quotes[Math.floor(Math.random() * t.quotes.length)]}"`;
+                            }
+                        }
+                    });
+                }
+
+                // Spawn Airdrop Flash Parcel every ~50 seconds
+                if (tickCounter % 500 === 0) {
+                    spawnMysteryParcel();
+                }
+
+                // Auto-save every 15 seconds
+                if (tickCounter % 150 === 0) {
+                    saveGame();
+                }
+
+                updateDashboardUI();
+            }, 100);
+        };
+    </script>
+</body>
+</html>
